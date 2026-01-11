@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Solver - Upload & Solve</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header id="header" style="cursor: pointer;" title="Click to go back to main page">
+            <h1>🧩 Sudoku Solver</h1>
+            <p class="subtitle">Upload a screenshot and get the solution instantly!</p>
+        </header>
+
+        <main>
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="fileInput" accept="image/*" hidden>
+                    <div class="upload-content">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <h3>Drag & Drop, Click to Upload, or Paste</h3>
+                        <p>Upload a screenshot or paste from clipboard (Ctrl+V / Cmd+V)</p>
+                        <button class="btn-primary" id="chooseFileBtn">
+                            Choose File
+                        </button>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn-secondary" id="manualInputBtn">
+                        ✏️ Manual Input
+                    </button>
+                </div>
+                <div class="preview-section" id="previewSection" style="display: none;">
+                    <h3>Preview</h3>
+                    <img id="previewImage" alt="Preview">
+                    <button class="btn-primary" id="solveBtn">Solve Sudoku</button>
+                    <button class="btn-secondary" id="cancelBtn">Cancel</button>
+                </div>
+            </div>
+
+            <div class="loading" id="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Processing image and solving Sudoku...</p>
+            </div>
+
+            <div class="results-section" id="resultsSection" style="display: none;">
+                <div class="result-tabs">
+                    <button class="tab-btn active" data-tab="original">Original</button>
+                    <button class="tab-btn" data-tab="solved">Solution</button>
+                </div>
+
+                <div class="grid-container">
+                    <div class="sudoku-grid" id="originalGrid"></div>
+                    <div class="sudoku-grid" id="solvedGrid" style="display: none;"></div>
+                </div>
+
+                <button class="btn-primary" id="resetBtn">Solve Another Puzzle</button>
+            </div>
+
+            <div class="manual-input-section" id="manualInputSection" style="display: none;">
+                <h3>Manual Input</h3>
+                <p>Enter the Sudoku puzzle manually. Type numbers 1-9 for filled cells. Leave empty cells blank (they will be treated as 0 automatically).</p>
+                <div class="manual-grid-container">
+                    <div class="manual-grid" id="manualGrid"></div>
+                </div>
+                <button class="btn-primary" id="solveManualBtn">Solve</button>
+                <button class="btn-secondary" id="cancelManualBtn">Cancel</button>
+            </div>
+
+            <div class="error-message" id="errorMessage" style="display: none;"></div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Ensure header is clickable after page loads
+        function attachHeaderClick() {
+            const header = document.getElementById('header');
+            if (header) {
+                header.style.cursor = 'pointer';
+                header.title = 'Click to go back to main page';
+                header.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('Header clicked!');
+                    if (typeof window.resetView === 'function') {
+                        window.resetView();
+                    } else if (typeof resetView === 'function') {
+                        resetView();
+                    } else {
+                        // Fallback: manually reset
+                        document.getElementById('uploadArea').style.display = 'block';
+                        document.getElementById('previewSection').style.display = 'none';
+                        document.getElementById('manualInputSection').style.display = 'none';
+                        document.getElementById('resultsSection').style.display = 'none';
+                        document.getElementById('loading').style.display = 'none';
+                    }
+                });
+                console.log('Header click handler attached');
+            } else {
+                console.error('Header element not found');
+            }
+        }
+
+        // Try multiple times to ensure it works
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', attachHeaderClick);
+        } else {
+            attachHeaderClick();
+        }
+        window.addEventListener('load', attachHeaderClick);
+    </script>
+</body>
+</html>
+
