@@ -36,4 +36,5 @@ build/
 
 ### Mac OS ###
 .DS_Store
-*.application.properties
+# Spring Boot real config
+src/main/resources/application.properties
